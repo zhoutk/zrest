@@ -40,6 +40,6 @@ export default {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const middleware = require('./middlewares/' + name).default
         // eslint-disable-next-line prefer-spread
-        return (middleware && await middleware.apply(null, args)) || async function (ctx: any, next: () => any) { await next() }
+        return (middleware && await middleware(args)) || async function (ctx: Koa.DefaultContext, next: () => any) { await next() }
     }
 }

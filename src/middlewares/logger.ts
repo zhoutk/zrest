@@ -1,9 +1,10 @@
 import color from 'cli-color'
+import Koa from 'koa'
 /**
  * http日志
  */
 export default () => {
-    return async (ctx: any, next: () => any) => {
+    return async (ctx: Koa.DefaultContext, next: () => any) => {
         if (G.isDev()) {
             const start = Date.now()
             await next()

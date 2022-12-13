@@ -1,3 +1,4 @@
+import Koa from 'koa'
 import {STCODES} from './enums'
 import lodash from 'lodash'
 import {STMESSAGES} from './enums'
@@ -23,7 +24,7 @@ const GlobVar = {
         else
             return Object.assign({}, data, { status, message: message === '' ? (STMESSAGES[status.toString()] || '') : message })
     },
-    koaError(ctx: any, status: number, message: string) {
+    koaError(ctx: Koa.DefaultContext, status: number, message: string) {
         ctx.ErrCode = status
         return new KoaErr({ message, status })
     },

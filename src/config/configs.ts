@@ -9,7 +9,6 @@ export default {
         }
     },
     port: 5000,
-    StandSocketPort: 1202,
     db_dialect: 'mysql',
     DbLogClose: false,
     dbconfig: {

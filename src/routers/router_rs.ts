@@ -1,4 +1,5 @@
 import Router from 'koa-router'
+import Koa from 'koa'
 //import BaseDao from '../db/baseDao'
 const router = new Router()
 
@@ -10,7 +11,7 @@ const router = new Router()
 // }
 
 export default (() => {
-    const process = async (ctx: any, next) => {
+    const process = async (ctx: Koa.DefaultContext) => {
         ctx.body = `rs result -- ${JSON.stringify(ctx.params)}`
         const method: string = ctx.method.toUpperCase()
         //let tableName: string = ctx.params.table

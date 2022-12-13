@@ -1,5 +1,7 @@
+import Koa from 'koa'
+
 export default () => {
-    return async (ctx: any, next: () => any) => {
+    return async (ctx: Koa.DefaultContext, next: () => any) => {
         try {
             await next()
         } catch (err) {

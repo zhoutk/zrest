@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "command": "yarn start",
+            "name": "Run yarn start",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "name": "g++ addon",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/usr/bin/node",
+            "args": ["${workspaceFolder}/dist/index.js"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "Elibs",
+                    "value" : "/home/roch/libs/extra-libs"
+                },
+                {
+                    "name": "Enclib",
+                    "value" : "/home/roch/enchm/Enclib"
+                },
+                {
+                    "name": "DISPLAY",
+                    "value" : "roch:10.0"
+                },
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value" : "$Elibs:$Enclib/bin"
+                },
+                {
+                    "name": "QT_QPA_PLATFORM_PLUGIN_PATH",
+                    "value" : "$Elibs"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}
