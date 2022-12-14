@@ -3,8 +3,11 @@ import {STCODES} from './enums'
 import lodash from 'lodash'
 import {STMESSAGES} from './enums'
 import { configure, getLogger} from 'log4js'
+import uuid from 'uuid'
 import logCfg from '../config/log4js'
 import CONFIGS from '../config/configs'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+let addon = require('bindings')('zorm')
 
 const env = process.env.NODE_ENV || 'dev'            //dev - 开发; prod - 生产； test - 测试;
 const GlobVar = {
@@ -14,6 +17,7 @@ const GlobVar = {
     STCODES,
     ROOT_PATH: `${process.cwd()}${env === 'dev' ? '' : '/dist'}`,
     NODE_ENV: env,
+    ORM : new addon.Zorm(CONFIGS.db_dialect, CONFIGS.db_cfg_str, CONFIGS.db_log_close),
     logger: (() => {
         configure(logCfg)
         return getLogger('default')
@@ -27,6 +31,9 @@ const GlobVar = {
     koaError(ctx: Koa.DefaultContext, status: number, message: string) {
         ctx.ErrCode = status
         return new KoaErr({ message, status })
+    },
+    uuid() {
+        return uuid.v1().split('-')[0]
     },
     isDev() {
         return G.NODE_ENV === 'dev'
