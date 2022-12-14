@@ -1,7 +1,25 @@
 {
-    "files.associations": {
-        "array": "cpp",
-        "string": "cpp",
-        "string_view": "cpp"
+  "files.associations": {
+    "array": "cpp",
+    "string": "cpp",
+    "string_view": "cpp"
+  },
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "port": "12321",
+      "protocol": "http"
+    },
+    "win10": {
+      "hostname": "192.168.0.55",
+      "locationTags": "123"
+    },
+    "macos": {
+      "hostname": "192.168.0.12",
+      "locationTags": "456"
+    },
+    "linux": {
+      "hostname": "192.168.6.6",
+      "locationTags": "789"
     }
+  }
 }

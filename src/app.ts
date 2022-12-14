@@ -17,7 +17,6 @@ export default {
             'bodyParser', //body解析
             'rewrite', //url重写
             'static',
-            // ['graphql', app],
             'router',
         ]
         for (const n of middlewares) {
@@ -32,7 +31,7 @@ export default {
                 }
             }
         }
-        //其他始始化处理  directory socket schedule ...
+        //其他初始化处理  directory socket schedule ...
         await new Startup().init(app)
         return app
     },

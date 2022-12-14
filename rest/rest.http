@@ -1,11 +1,7 @@
 @host = {{protocol}}://{{hostname}}:{{port}}
 
-@protocol=http
-@hostname=192.168.0.55
-@port=3000
+###
+GET {{host}}/rs/getSymbols/{{locationTags}}
 
 ###
-GET {{host}}/rs/getSymbols/Category
-
-###
-GET {{host}}/rory
+GET {{host}}/test
