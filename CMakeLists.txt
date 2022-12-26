@@ -18,16 +18,14 @@ if(MSVC)
 
     link_directories(D:\\codes\\zorm\\out\\build\\x64-debug)
 elseif(UNIX)
-    include_directories(/home/roch/codes/zorm/zorm/src/include)
+    include_directories(/home/roch/codes/zorm/src/include)
     include_directories(/home/roch/codes/zorm/thirds/sqlit3)
     include_directories(/home/roch/codes/zorm/thirds/zjson)
-
-    link_directories(/home/roch/codes/zorm/build/zorm)
+    include_directories(/home/roch/codes/zorm/thirds/pgsql/include/)
+    include_directories(/home/roch/codes/zorm/thirds/MySQL-C-Api-6.1/include/)
 endif()
 
-
 add_definitions(-DZORM_LIB)
-
 add_definitions(-D__LINUX__)
 
 set(NODE_LINK_LIBS "")
@@ -45,7 +43,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/node_modules/node-addon-api/src
     ${CMAKE_JS_INC})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_JS_LIB})
-target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} libzorm.so)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} )
 
 # define NPI_VERSION
 add_definitions(-DNAPI_VERSION=8)

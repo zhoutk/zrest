@@ -58,8 +58,8 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
     case "mysql"_hash:
         /* code */
         break;
-    case "sqlit3"_hash:
-        db = new ZORM::DbBase(info[1].As<Napi::String>(), "sqlit3", ZJSON::Json({{"DbLogClose", DbLogClose}}));
+    case "sqlit3"_hash: 
+        db = new ZORM::DbBase("sqlit3", ZJSON::Json({{"connString", info[1].As<Napi::String>()},{"DbLogClose", DbLogClose}}));
         break;
     default:
         break;

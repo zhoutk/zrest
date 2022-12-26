@@ -1,6 +1,6 @@
 .vscode/
 **/**/configs.ts
-
+build/
 # Logs
 logs
 *.log
