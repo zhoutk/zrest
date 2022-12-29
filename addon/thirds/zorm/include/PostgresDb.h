@@ -13,11 +13,13 @@ namespace ZORM {
 	using std::string;
 
 	namespace Postgres {
-		vector<string> QUERY_EXTRA_KEYS;
-		vector<string> QUERY_UNEQ_OPERS;
 
-		class ZORM_API PostgresDb : public Idb
-		{
+		class ZORM_API PostgresDb : public Idb {
+			
+		public:
+			const vector<string> QUERY_EXTRA_KEYS { "ins", "lks", "ors"};
+			const vector<string> QUERY_UNEQ_OPERS { ">,", ">=,", "<,", "<=,", "<>,", "=,"};
+
 		private:
 			PGconn * GetConnection(string& err)
 			{
@@ -44,15 +46,6 @@ namespace ZORM {
 			}
 
 			void init(){
-				QUERY_EXTRA_KEYS = DbUtils::MakeVector("ins,lks,ors");
-
-				QUERY_UNEQ_OPERS.push_back(">,");
-				QUERY_UNEQ_OPERS.push_back(">=,");
-				QUERY_UNEQ_OPERS.push_back("<,");
-				QUERY_UNEQ_OPERS.push_back("<=,");
-				QUERY_UNEQ_OPERS.push_back("<>,");
-				QUERY_UNEQ_OPERS.push_back("=,");
-
 				connString = "dbname=" + dbname + " user=" + dbuser + " password=" + dbpwd + " hostaddr=" + dbhost + " port=" + DbUtils::IntTransToString(dbport);
 			}
 

@@ -2,7 +2,7 @@
 #include "Idb.h"
 #include "Sqlit3Db.h"
 #include "MysqlDb.h"
-//#include "PostgresDb.h"
+#include "PostgresDb.h"
 #include <algorithm>
 
 namespace ZORM
@@ -25,15 +25,15 @@ namespace ZORM
 
 				db = new Mysql::MysqlDb(dbhost, dbuser, dbpwd, dbname, dbport, options);
 			}
-			// else if(dbType.compare("postgres") == 0){
-			// 	string dbhost = options.getAndRemove("db_host").toString();
-			// 	string dbuser = options.getAndRemove("db_user").toString();
-			// 	string dbpwd = options.getAndRemove("db_pass").toString();
-			// 	string dbname = options.getAndRemove("db_name").toString();
-			// 	int dbport = options.getAndRemove("db_port").toInt();
+			else if(dbType.compare("postgres") == 0){
+				string dbhost = options.getAndRemove("db_host").toString();
+				string dbuser = options.getAndRemove("db_user").toString();
+				string dbpwd = options.getAndRemove("db_pass").toString();
+				string dbname = options.getAndRemove("db_name").toString();
+				int dbport = options.getAndRemove("db_port").toInt();
 
-			// 	db = new Postgres::PostgresDb(dbhost, dbuser, dbpwd, dbname, dbport, options);
-			// }
+				db = new Postgres::PostgresDb(dbhost, dbuser, dbpwd, dbname, dbport, options);
+			}
 			else {
 				throw "Db Type error or not be supported. ";
 			}
