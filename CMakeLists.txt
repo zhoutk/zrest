@@ -18,7 +18,7 @@ include_directories(./addon/thirds/MySQL-C-Api-6.1/include/)
 
 if(MSVC)
     add_definitions(-D__MSVC__)
-    include_directories(./addon/thirds/pqsql)
+    include_directories(./addon/thirds/pqsql/include)
 elseif(UNIX)
     add_definitions(-D__LINUX__)
     add_definitions(-D_GNU_SOURCE)
