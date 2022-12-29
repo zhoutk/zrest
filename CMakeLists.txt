@@ -32,10 +32,6 @@ elseif(UNIX)
     include_directories(./addon/thirds/zjson)
     # include_directories(./addon/thirds/pgsql/include/)
     include_directories(./addon/thirds/MySQL-C-Api-6.1/include/)
-
-    set(MysqlDll mysqlclient)
-    set(pthread pthread)
-    set(pqName pq)
 endif()
 
 add_definitions(-DZORM_LIB)
@@ -56,7 +52,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/node_modules/node-addon-api/src
     ${CMAKE_JS_INC})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_JS_LIB})
-target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} ${pthread} ${MysqlDll} ${pqName} dl)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} dl)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 # define NPI_VERSION
