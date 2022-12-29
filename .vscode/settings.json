@@ -18,9 +18,15 @@
       "port": "3000",
       "locationTags": "456"
     },
-    "linux": {
-      "hostname": "192.168.6.6",
-      "locationTags": "789"
+    "u:bs": {
+      "port": "3000",
+      "hostname": "192.168.0.12",
+      "locationTags": "1804"
+    },
+    "u20:bs": {
+      "port": "5000",
+      "hostname": "192.168.0.12",
+      "locationTags": "2004"
     }
   }
 }
