@@ -46,7 +46,7 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
 {
     int len = info.Length();
     Napi::Env env = info.Env();
-    if (len < 2 || !info[0].IsString() || !info[1].IsString()) {
+    if (len < 2 || !info[0].IsString()) {
         Napi::TypeError::New(env, "String expected").ThrowAsJavaScriptException();
     }
     std::string dbDialect = info[0].As<Napi::String>().ToString();

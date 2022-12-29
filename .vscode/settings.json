@@ -15,6 +15,7 @@
     },
     "macos": {
       "hostname": "192.168.0.12",
+      "port": "3000",
       "locationTags": "456"
     },
     "linux": {
