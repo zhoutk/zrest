@@ -11,11 +11,11 @@ SET(CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX17_ABI=0")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-include_directories(addon/thirds/zorm/include)
-include_directories(addon/thirds/sqlit3)
-include_directories(addon/thirds/zjson)
-include_directories(addon/thirds/MySQL-C-Api-6.1/include/)
-include_directories(addon/thirds/pqsql/include)
+include_directories(C:\\codes\\zrest\\addon\\thirds\\zorm\\include)
+include_directories(C:\\codes\\zrest\\addon\\thirds\\sqlit3)
+include_directories(C:\\codes\\zrest\\addon\\thirds\\zjson)
+include_directories(C:\\codes\\zrest\\addon\\thirds\\MySQL-C-Api-6.1\\include)
+include_directories(C:\\codes\\zrest\\addon\\thirds\\pgsql\\include)
 
 if(MSVC)
     add_definitions(-D__MSVC__)
