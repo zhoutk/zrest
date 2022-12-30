@@ -24,7 +24,6 @@ public:
 
 private:
     ZORM::Idb* db;
-    bool DbLogClose;
 };
 
 #endif

@@ -4,4 +4,4 @@
 GET {{host}}/rs/getSymbols/{{locationTags}}
 
 ###
-GET {{host}}/test
+GET {{host}}/rs/table_for_test

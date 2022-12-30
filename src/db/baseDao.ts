@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-// import TransElement from '../common/transElement'
-// import * as moment from 'moment'
 
 export default class BaseDao {
     table: string

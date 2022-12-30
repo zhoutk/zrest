@@ -42,7 +42,7 @@ Napi::Object Zorm::Init(Napi::Env env, Napi::Object exports)
     return exports;
 }
 
-Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nullptr), DbLogClose(false)
+Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nullptr)
 {
     int len = info.Length();
     Napi::Env env = info.Env();
@@ -50,16 +50,13 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
         Napi::TypeError::New(env, "String expected").ThrowAsJavaScriptException();
     }
     std::string dbDialect = info[0].As<Napi::String>().ToString();
-    if(len >= 3){
-        DbLogClose = info[2].As<Napi::String>().ToBoolean();
-    }
     switch (hash_(dbDialect.c_str()))
     {
     case "mysql"_hash:
-        /* code */
+        db = new ZORM::DbBase("mysql", ZJSON::Json(info[1].As<Napi::String>()));
         break;
     case "sqlit3"_hash: 
-        db = new ZORM::DbBase("sqlit3", ZJSON::Json({{"connString", info[1].As<Napi::String>()},{"DbLogClose", DbLogClose}}));
+        db = new ZORM::DbBase("sqlit3", ZJSON::Json(info[1].As<Napi::String>()));
         break;
     default:
         break;
