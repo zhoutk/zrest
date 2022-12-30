@@ -8,7 +8,7 @@ export default {
             run: false
         }
     },
-    port: 12321,
+    port: 3000,
     db_dialect: 'mysql',
     db_log_close: false,
     db_options: {
