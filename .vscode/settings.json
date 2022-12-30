@@ -10,7 +10,7 @@
       "protocol": "http"
     },
     "win10": {
-      "hostname": "192.168.0.55",
+      "hostname": "127.0.0.1",
       "locationTags": "123"
     },
     "macos": {
@@ -33,5 +33,7 @@
       "hostname": "192.168.0.12",
       "locationTags": "2204"
     }
-  }
+  },
+  "cmake.configureOnOpen": false,
+  "cmake.configureOnEdit": false
 }

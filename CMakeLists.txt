@@ -8,18 +8,18 @@ project (zorm)
 set(VERSION 1.0.0.0)
 SET(CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX17_ABI=0")
 # set(CMAKE_BUILD_TYPE Debug)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-
-include_directories(C:\\codes\\zrest\\addon\\thirds\\zorm\\include)
-include_directories(C:\\codes\\zrest\\addon\\thirds\\sqlit3)
-include_directories(C:\\codes\\zrest\\addon\\thirds\\zjson)
-include_directories(C:\\codes\\zrest\\addon\\thirds\\MySQL-C-Api-6.1\\include)
-include_directories(C:\\codes\\zrest\\addon\\thirds\\pgsql\\include)
-
+include_directories(./thirds/sqlit3)
+include_directories(./thirds/zorm/include)
+include_directories(./thirds/zjson)
+include_directories(./thirds/MySQL-C-Api-6.1/include)
 if(MSVC)
     add_definitions(-D__MSVC__)
-    #include_directories(addon/thirds/pqsql/include)
+    link_directories(./thirds/MySQL-C-Api-6.1/lib)
+    include_directories(./thirds/pgsql/include)
+    link_directories(./thirds/pgsql/lib)
+    set(MysqlDll libmysql.dll)
+    set(pqName libpq.dll)
 elseif(UNIX)
     add_definitions(-D__LINUX__)
     add_definitions(-D_GNU_SOURCE)
@@ -31,6 +31,7 @@ elseif(UNIX)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 
     include_directories(/usr/include/postgresql)
+    set(dlLinkParam dl)
 endif()
 
 add_definitions(-DZORM_LIB)
@@ -39,8 +40,8 @@ add_definitions(-DSQLITE_OMIT_TEMPDB)
 set(NODE_LINK_LIBS "")
 set(NODE_EXTERNAL_INCLUDES "")
 
-FILE(GLOB_RECURSE SOURCE_FILES "./addon/*.cc") 
-FILE(GLOB_RECURSE HEADER_FILES "./addon/*.h") 
+FILE(GLOB_RECURSE SOURCE_FILES "./addon/*.cc" "./thirds/sqlit3/*.c") 
+FILE(GLOB_RECURSE HEADER_FILES "./addon/*.h" "./thirds/sqlit3/*.h") 
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
@@ -51,7 +52,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/node_modules/node-addon-api/src
     ${CMAKE_JS_INC})
 #target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_JS_LIB})
-target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} dl)
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} ${MysqlDll} ${pqName} ${dlLinkParam})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 
 # define NPI_VERSION
