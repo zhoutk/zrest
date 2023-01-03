@@ -9,6 +9,19 @@ namespace ZORM {
 
 	class DbUtils {
 	public:
+		static char * trim(char *str)
+		{
+			char *p = str;
+			while (*p == ' ' || *p == '/t' || *p == '/r' || *p == '/n')
+				p++;
+			str = p;
+			p = str + strlen(str) - 1;
+			while (*p == ' ' || *p == '/t' || *p == '/r' || *p == '/n')
+				--p;
+			*(p + 1) = 0;
+			return str;
+		}
+
 		static std::string escape(std::string str)
 		{
 			setlocale(LC_CTYPE, "");
@@ -156,6 +169,7 @@ namespace ZORM {
 				auto index = info.find_first_of("\n");
 				if(index != info.npos)
 					info = info.substr(0, index);
+				info.erase(std::remove(info.begin(), info.end(), '\"'), info.end());
 				info.insert(0, " details, ");
 			}
 			info.insert(0, STCODEMESSAGES[(int)code]);

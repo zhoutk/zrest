@@ -203,8 +203,9 @@ namespace ZORM {
 			Json select(string tablename, Json &params, vector<string> fields = vector<string>(), Json values = Json(JsonType::Array)) override
 			{
 				Json rs = genSql(tablename, values, params, fields, 1, queryByParameter);
-				if(rs["status"].toInt() == 200)
+				if(rs["status"].toInt() == 200){
 					return ExecQuerySql(tablename, fields, values);
+				}
 				else
 					return rs;
 			}
@@ -574,7 +575,7 @@ namespace ZORM {
 								break;
 
 							default:
-								al.addSubitem(PQfname(res, j), PQgetvalue(res, i, j));
+								al.addSubitem(PQfname(res, j), DbUtils::trim(PQgetvalue(res, i, j)));
 								break;
 							}
 						}
