@@ -1,5 +1,5 @@
 .vscode/
-# **/**/configs.ts
+**/configs.ts
 **/.DS_Store
 build/
 # Logs
