@@ -50,13 +50,15 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
         Napi::TypeError::New(env, "String expected").ThrowAsJavaScriptException();
     }
     std::string dbDialect = info[0].As<Napi::String>().ToString();
+    std::string opStr = info[1].As<Napi::String>();
+    ZJSON::Json options(opStr);
     switch (hash_(dbDialect.c_str()))
     {
     case "mysql"_hash:
-        db = new ZORM::DbBase("mysql", ZJSON::Json(info[1].As<Napi::String>()));
+        db = new ZORM::DbBase("mysql", options);
         break;
     case "sqlit3"_hash: 
-        db = new ZORM::DbBase("sqlit3", ZJSON::Json(info[1].As<Napi::String>()));
+        db = new ZORM::DbBase("sqlit3", options);
         break;
     default:
         break;

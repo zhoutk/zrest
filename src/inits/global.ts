@@ -17,7 +17,7 @@ const GlobVar = {
     STCODES,
     ROOT_PATH: `${process.cwd()}${env === 'dev' ? '' : '/dist'}`,
     NODE_ENV: env,
-    ORM : new addon.Zorm(CONFIGS.db_dialect, JSON.stringify(CONFIGS.db_options), CONFIGS.db_log_close),
+    ORM : new addon.Zorm(CONFIGS.db_dialect, JSON.stringify(CONFIGS.db_options)),
     logger: (() => {
         configure(logCfg)
         return getLogger('default')

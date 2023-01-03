@@ -38,6 +38,9 @@ elseif(UNIX)
 
     include_directories(/usr/include/postgresql)
     set(dlLinkParam dl)
+    set(MysqlDll mysqlclient)
+    # set(pthread pthread)
+    set(pqName pq)
 endif()
 
 add_definitions(-DZORM_LIB)
