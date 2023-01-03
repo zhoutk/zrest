@@ -54,6 +54,9 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
     ZJSON::Json options(opStr);
     switch (hash_(dbDialect.c_str()))
     {
+    case "postgres"_hash:
+        db = new ZORM::DbBase("postgres", options);
+        break;
     case "mysql"_hash:
         db = new ZORM::DbBase("mysql", options);
         break;
