@@ -5,3 +5,6 @@ GET {{host}}/rs/getSymbols/{{locationTags}}
 
 ###
 GET {{host}}/rs/table_for_test
+
+###
+GET {{host}}/rs/table_for_test/a1b2c3d4

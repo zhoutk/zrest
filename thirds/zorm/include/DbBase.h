@@ -14,8 +14,9 @@ namespace ZORM
 		DbBase(string dbType, Json options = Json()) {
 			transform(dbType.begin(), dbType.end(), dbType.begin(), ::tolower);
 			bool DbLogClose = options["DbLogClose"].toBool();
-			if (dbType.compare("sqlite3") == 0)
+			if (dbType.compare("sqlite3") == 0){
 				db = new Sqlit3::Sqlit3Db(options["connString"].toString(), DbLogClose, options["parameterized"].toBool());
+			}
 			else if(dbType.compare("mysql") == 0){
 				string dbhost = options.getAndRemove("db_host").toString();
 				string dbuser = options.getAndRemove("db_user").toString();
