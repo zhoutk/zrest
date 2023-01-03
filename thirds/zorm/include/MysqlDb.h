@@ -524,7 +524,8 @@ namespace ZORM {
 					string errmsg = "";
 					errmsg.append((char *)mysql_error(mysql)).append(". error code: ");
 					errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-					return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					return rs;
 				}
 				else
 				{
@@ -569,7 +570,8 @@ namespace ZORM {
 					string errmsg = "";
 					errmsg.append((char*)mysql_error(mysql)).append(". error code: ");
 					errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-					return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					return rs;
 				}
 				else
 				{
@@ -596,7 +598,8 @@ namespace ZORM {
 							string errmsg = "";
 							errmsg.append((char *)mysql_error(mysql)).append(". error code: ");
 							errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-							return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+							rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+							return rs;
 						}
 						delete [] bind;
 					}
@@ -612,7 +615,8 @@ namespace ZORM {
 							string errmsg = "";
 							errmsg.append((char *)mysql_error(mysql)).append(". error code: ");
 							errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-							return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+							rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+							return rs;
 						}
 						ret = mysql_stmt_store_result(stmt);
 						int num_fields = mysql_num_fields(prepare_meta_result);
@@ -678,7 +682,8 @@ namespace ZORM {
 					string errmsg = "";
 					errmsg.append((char*)mysql_error(mysql)).append(". error code: ");
 					errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-					return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					return rs;
 				}
 				else {
 					int affected = (int)mysql_affected_rows(mysql);
@@ -701,7 +706,8 @@ namespace ZORM {
 					string errmsg = "";
 					errmsg.append((char*)mysql_error(mysql)).append(". error code: ");
 					errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-					return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+					return rs;
 				}
 				else {
 					int vLen = values.size();
@@ -727,7 +733,8 @@ namespace ZORM {
 							string errmsg = "";
 							errmsg.append((char *)mysql_error(mysql)).append(". error code: ");
 							errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-							return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+							rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+							return rs;
 						}
 						delete [] bind;
 					}
@@ -736,7 +743,8 @@ namespace ZORM {
 						string errmsg = "";
 						errmsg.append((char *)mysql_error(mysql)).append(". error code: ");
 						errmsg.append(DbUtils::IntTransToString(mysql_errno(mysql)));
-						return rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+						rs.extend(DbUtils::MakeJsonObject(STDBOPERATEERR, errmsg));
+						return rs;
 					}
 					int affected = (int)mysql_affected_rows(mysql);
 					rs.addSubitem("affected", affected);
