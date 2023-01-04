@@ -48,7 +48,20 @@ export default class DbInit extends BaseDao {
             age: 18,
             score: 99.99
         }
-        return JSON.parse(G.ORM.create('table_for_test', JSON.stringify(cObj)))
+        G.ORM.create('table_for_test', JSON.stringify(cObj))
+
+        let cObjs = [
+            {id: 'a2b3c4d5', name: 'test001', age: 19, score: 69.15 },
+            {id: 'a3b4c5d6', name: 'test002', age: 20, score: 56.87 },
+        ]
+        G.ORM.insertBatch('table_for_test', JSON.stringify(cObjs))
+        
+        let sqlArr = [
+            {text: 'insert into table_for_test (id,name,age,score) values (\'a4b5c6d7\',\'test003\',21,78.48)'},
+            {text: 'insert into table_for_test (id,name,age,score) values (?,?,?,?)', values: ['a5b6c7d8','test004',22,23.27]},
+            {text: 'insert into table_for_test (id,name,age,score) values (\'a6b7c8d9\',\'test005\',23,43.93)'},
+        ]
+        return G.ORM.transGo(JSON.stringify(sqlArr))
     }
     async update(params = {}, fields = [], session = { userid: '' }): Promise<any> {
         return new Promise((resolve, reject) => {
