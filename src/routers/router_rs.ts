@@ -34,10 +34,12 @@ export default (() => {
         if (method === 'GET' && !tableName.startsWith('v_') && (!is_module_exist || 
             is_module_exist && !Object.getOwnPropertyNames(module.default.prototype).some((al) => al === 'retrieve')) ) {
             let sqlFindView : string
-            if(G.CONFIGS.db_dialect == 'sqlit3')
+            if(G.CONFIGS.db_dialect == 'sqlite3')
                 sqlFindView = `SELECT name FROM sqlite_master WHERE type = 'view' AND name = 'v_${tableName}'`
             else if(G.CONFIGS.db_dialect == 'mysql')
                 sqlFindView = `SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA= '${G.CONFIGS.db_options.db_name}' and TABLE_NAME= 'v_${tableName}' `
+            else if(G.CONFIGS.db_dialect == 'postgres')
+                sqlFindView = `select * from pg_views where schemaname = 'public' and viewname = 'v_${tableName}'`
             else
                 sqlFindView = ''
             if(sqlFindView.length > 0){
