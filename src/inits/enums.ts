@@ -11,6 +11,7 @@ enum STCODES {
     USERNOTFOUNDERR = 414,         //用户不存在
     DATABANDELETE = 415,        //数据禁止删除
     EXCEPTIONERR = 500,            //发生异常
+    DBDIALECTNOTSUPPORT = 700,     //不支持的数据库
     DBCONNECTERR = 701,        //数据库连接失败
     DBOPERATEERR = 702,        //数据库操作失败
     DBNEEDRESTARTERR = 703,  //数据库表修改，需要服务重启
@@ -32,6 +33,7 @@ const STMESSAGES = {
     [STCODES.USERNOTFOUNDERR]: 'Error: User is not found. ',
     [STCODES.DATABANDELETE]: 'Error: The data is ban delete. ',
     [STCODES.EXCEPTIONERR]: 'Error: Exception is thrown. ',
+    [STCODES.DBDIALECTNOTSUPPORT]: 'Error: The Dialect is not supported yet. ',
     [STCODES.DBCONNECTERR]: 'Error: Database connection is wrong. ',
     [STCODES.DBOPERATEERR]: 'Error: Database operation is wrong. ',
     [STCODES.DBNEEDRESTARTERR]: 'Error: Database modify & serve need resart. ',

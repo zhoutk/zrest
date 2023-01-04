@@ -62,20 +62,6 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
         break;
     case "sqlite3"_hash: {
         db = new ZORM::DbBase("sqlite3", options);
-        db->execSql("DROP TABLE IF EXISTS \"table_for_test\";");
-        db->execSql("CREATE TABLE \"table_for_test\" (\
-                        \"id\" char(64) NOT NULL,\
-                        \"name\" TEXT DEFAULT '',\
-                        \"age\" integer DEFAULT 0,\
-                        \"score\" real DEFAULT 0.0,\
-                        PRIMARY KEY (\"id\"));");
-        ZORM::Json cObj{
-            {"id", "a1b2c3d4"},
-            {"name", "Kevin 凯文"},
-            {"age", 18},
-            {"score", 99.99}
-        };
-        db->create("table_for_test", cObj);
         break;
     }
     default:

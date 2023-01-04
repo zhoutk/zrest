@@ -11,3 +11,12 @@ GET {{host}}/rs/table_for_test
 
 ###
 GET {{host}}/rs/table_for_test/a1b2c3d4
+
+###
+GET {{host}}/rs/db_init?name=test&fuzzy=1
+
+###
+GET {{host}}/rs/db_init?age=>,21
+
+###
+POST {{host}}/rs/db_init

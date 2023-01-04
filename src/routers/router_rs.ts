@@ -14,7 +14,7 @@ export default (() => {
         const method: string = ctx.method.toUpperCase()
         let tableName: string = ctx.params.table
         const id: string | number | undefined = ctx.params.id
-        let params = method === 'POST' || method === 'PUT' ? ctx.request.body : ctx.request.query
+        let params = method === 'POST' || method === 'PUT' ? (ctx.request.body || {}) : (ctx.request.querys || {})
         if (id != null)
             params.id = id
         let {fields, ...restParams} = params
@@ -39,11 +39,11 @@ export default (() => {
             else if(G.CONFIGS.db_dialect == 'mysql')
                 sqlFindView = `SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA= '${G.CONFIGS.db_options.db_name}' and TABLE_NAME= 'v_${tableName}' `
             else if(G.CONFIGS.db_dialect == 'postgres')
-                sqlFindView = `select * from pg_views where schemaname = 'public' and viewname = 'v_${tableName}'`
+                sqlFindView = `select viewname from pg_views where schemaname = 'public' and viewname = 'v_${tableName}'`
             else
                 sqlFindView = ''
             if(sqlFindView.length > 0){
-                let rs = G.ORM.querySql(sqlFindView)
+                let rs = JSON.parse(G.ORM.querySql(sqlFindView))
                 if (rs.status === 200)
                     tableName = 'v_' + tableName
             }
