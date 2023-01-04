@@ -14,7 +14,7 @@ export default (() => {
         const method: string = ctx.method.toUpperCase()
         let tableName: string = ctx.params.table
         const id: string | number | undefined = ctx.params.id
-        let params = method === 'POST' || method === 'PUT' ? (ctx.request.body || {}) : (ctx.request.querys || {})
+        let params = (method === 'POST' || method === 'PUT') ? (ctx.request.body || {}) : (ctx.request.query || {})
         if (id != null)
             params.id = id
         let {fields, ...restParams} = params
