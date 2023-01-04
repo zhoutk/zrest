@@ -4,6 +4,9 @@
 GET {{host}}/rs/getSymbols/{{locationTags}}
 
 ###
+GET {{host}}/rs/table_name_not_exist_in_db
+
+###
 GET {{host}}/rs/table_for_test
 
 ###

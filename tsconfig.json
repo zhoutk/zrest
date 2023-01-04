@@ -33,6 +33,10 @@
     "node_modules",
     "dist",
     "**/*.test.ts",
-    "public"
+    "public",
+    "test",
+    "rest",
+    "addon",
+    "thirds"
   ]
 }

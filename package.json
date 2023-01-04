@@ -7,7 +7,8 @@
     "configure": "cmake-js configure --debug",
     "compile": "cmake-js compile --debug",
     "build": "cmake-js configure --release && cmake-js build",
-    "start": "nodemon dist/index.js"
+    "start": "nodemon dist/index.js",
+    "test": "mocha test/test.js"
   },
   "keywords": [
     "rest",
@@ -46,6 +47,7 @@
     "@types/koa-static": "^4.0.2",
     "@types/koa2-cors": "^2.0.2",
     "@types/lodash": "^4.14.191",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.12",
     "@types/require-dir": "^1.0.2",
     "@types/uuid": "^9.0.0",
@@ -54,7 +56,9 @@
     "eslint": "^8.29.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "mocha": "^10.2.0",
     "nodemon": "^2.0.20",
+    "pactum": "^3.3.2",
     "prettier": "^2.8.1",
     "typescript": "^4.9.4"
   }
