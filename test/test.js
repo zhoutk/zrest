@@ -132,3 +132,103 @@ it('test retrieve by id', async () => {
   assert.equal(dataZero['score'], 23.27)
   assert.equal(dataZero['age'], 22)
 });
+
+it('test query using ins key', async () => {
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('ins', 'age,20,21,23')
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data']
+  assert.equal(dataZero.length, 3)
+});
+
+it('test query using lks key', async () => {
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('lks', 'name,001,age,23')
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data']
+  assert.equal(dataZero.length, 2)
+});
+
+it('test query using ors key', async () => {
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('ors', 'age,19,age,23')
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data']
+  assert.equal(dataZero.length, 2)
+});
+
+it('test query using page and size', async () => {
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('page', 1)
+    .withQueryParams('size', 3)
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data']
+  assert.equal(dataZero.length, 3)
+});
+
+it('test query using count key', async () => {
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('count', '1,total')
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data'][0]
+  assert.equal(dataZero['total'], 5)
+});
+
+it('test query using sum key', async () => {
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('sum', 'age,ageSum')
+    .withQueryParams('age', '<=,20')
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data'][0]
+  assert.equal(dataZero['ageSum'], 39)
+});
+
+it('test query using group key', async () => {
+  await spec()
+    .put('/rs/table_for_test')
+    .withBody({
+      id: 'a4b5c6d7',
+      age: 22
+    })
+    .expectJsonMatch({"status": 200})
+
+  const response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('group', 'age')
+    .withQueryParams('count', '*,total')
+    .withQueryParams('sort', 'total desc')
+    .expectJsonMatch({"status": 200})
+
+  const dataZero = response.json['data'][0]
+  assert.equal(dataZero['total'], 2)
+});
+
+it('test query using greater than and less than', async () => {
+  let response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('age', '>,21')
+    .expectJsonMatch({"status": 200})
+
+  let dataZero = response.json['data']
+  assert.equal(dataZero.length, 3)
+
+  response = await spec()
+    .get('/rs/table_for_test')
+    .withQueryParams('age', '>=,19,<=,22')
+    .expectJsonMatch({"status": 200})
+
+  dataZero = response.json['data']
+  assert.equal(dataZero.length, 4)
+});
