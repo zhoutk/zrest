@@ -78,8 +78,9 @@
     ```
 - 测试运行结果图
 测试运行输出
-
+![输入图片说明](tests/test_result_01.jpg)
 项目日志（包括请求和sql语句）
+![输入图片说明](tests/test_result_02.jpg)
 
 ## 项目结构
 
