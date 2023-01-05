@@ -56,9 +56,10 @@ export default class DbInit extends BaseDao {
         ]
         G.ORM.insertBatch('table_for_test', JSON.stringify(cObjs))
         
+        let placeholder: string = G.CONFIGS.db_dialect == 'postgres' ? '$1,$2,$3,$4' : '?,?,?,?'
         let sqlArr = [
             {text: 'insert into table_for_test (id,name,age,score) values (\'a4b5c6d7\',\'test003\',21,78.48)'},
-            {text: 'insert into table_for_test (id,name,age,score) values (?,?,?,?)', values: ['a5b6c7d8','test004',22,23.27]},
+            {text: `insert into table_for_test (id,name,age,score) values (${placeholder})`, values: ['a5b6c7d8','test004',22,23.27]},
             {text: 'insert into table_for_test (id,name,age,score) values (\'a6b7c8d9\',\'test005\',23,43.93)'},
         ]
         return G.ORM.transGo(JSON.stringify(sqlArr))

@@ -187,12 +187,12 @@ it('test query using count key', async () => {
 it('test query using sum key', async () => {
   const response = await spec()
     .get('/rs/table_for_test')
-    .withQueryParams('sum', 'age,ageSum')
+    .withQueryParams('sum', 'age,agesum')
     .withQueryParams('age', '<=,20')
     .expectJsonMatch({"status": 200})
 
   const dataZero = response.json['data'][0]
-  assert.equal(dataZero['ageSum'], 39)
+  assert.equal(dataZero['agesum'], 39)
 });
 
 it('test query using group key', async () => {

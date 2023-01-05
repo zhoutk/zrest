@@ -22,4 +22,4 @@ GET {{host}}/rs/table_for_test?age=>,21
 POST {{host}}/rs/db_init
 
 ###
-GET {{host}}/rs/table_for_test?id=a1b2c3d4&age=18
+GET {{host}}/rs/table_for_test?sum=age,ageSum&age=%3C=,20
