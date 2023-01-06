@@ -1,3 +1,5 @@
+#Zrest    &emsp;&emsp;  [中文介绍](README_CN.md)  
+<br/>
 ## Introduce
 A rest api rapid devlopment framework using node.js & C++ addon with cmake & cmake.js. Supporting sqlite3, mysql & postgres, Crossing windows, linux & macos.
 
