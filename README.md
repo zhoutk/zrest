@@ -279,7 +279,7 @@ Special features: use "=" to enable a field to skip the fuzzy influence, so that
             "message": "data insert success."
         }
     ```
-- use execSql to Execute sql statements which is write manually, calling by the backend
+- use execSql to Execute sql statements which is write manually, calling by the backend (G.ORM is global var， details in ./src/inits/global.ts)
 
 
     - for example:

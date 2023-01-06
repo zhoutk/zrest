@@ -256,7 +256,7 @@
     ```
 
 ## 高级操作
-- 新增一条记录
+- 新增一条记录(header头中增加授权token)
     - url
     ```
         [POST]/rs/users
@@ -294,7 +294,7 @@
             "message": "data execSql success."
         }
     ```
-- insertBatch批量插入与更新二合一接口，供后端内部调用
+- insertBatch批量插入与更新二合一接口，供后端内部调用(G.ORM 为全局对象， 详见 ./src/inits/global.ts)
     - 使用示例
     ```
         let params = [
