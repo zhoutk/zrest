@@ -1,4 +1,5 @@
-## 项目介绍   &emsp;&emsp;  [English](README.md)  
+# zrest    &emsp;&emsp;  [English](README.md)  
+## 项目介绍
 我将以往基于node.js与C++的相关项目结合起来，实现了一个微服务快速（rest api service）开发框架。该框架以关系数据库基础，现在支持（mysql、sqlite3、postgres），每建立一个数据表，就相当于自动实现了一组rest api，支持该表的增删改查、批量插入以及事务操作。并且查询功能支持很多高级操作，比如：in, sum, count, group等，且不用写任何SQL语句，查询语句会由前端提交的json对象自动转换成sql语句进行查询。  
 当你建立好一个数据表，rest api就自动支持该表所有字段的精确匹配与模糊匹配查询两种模式。多表查询可以方便的由视图来实现，本项目使用了一个约定，若一个表，存在带v_的前缀视图，则运行该视图。即存在一个Users表，同时我们写了一个视图（v_Users），该视图关联了Users与Company表，则rest api中的Users相关查询会被自动映射到v_Users上。有了这种约定，加上权限控制，我们可以很方便的设计出多表联合查询接口。  
 项目支持跨平台，同时支持windows, linux, macos
