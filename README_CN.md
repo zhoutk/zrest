@@ -13,7 +13,7 @@
 ## 技术选择
 - node.js 大于等于16，插件编写使用cmake.js方式
 - c++ 17， 项目管理都使用cmake
-- qlit3 官方的标准c实现，当前版本3.40.1
+- sqlite3 官方的标准c实现，当前版本3.40.1
 - mysql - c api （MySQL Connector C 6.1）
 - postgres - c api(pgsql14)
 

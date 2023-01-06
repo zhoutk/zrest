@@ -12,25 +12,25 @@ This combine and update gels， zjson and zorm, which is developed and used by m
 ## Technology selection
 - node.js >= 16，c++ addon managed by cmake.js
 - c++ 17， use cmake
-- qlit3 - c api v3.40.1
+- sqlite3 - c api v3.40.1
 - mysql - c api MySQL Connector C 6.1）
-- postgres - c api (pgsql14)
+- postgres - c api (pgsql14)  
 
 ## Table of Contents
-  - [Introduce](#introduce)
-  - [Related items](#related-items)
-  - [Technology selection](#technology-selection)
-  - [Table of Contents](#table-of-contents)
-  - [Run guidance](#run-guidance)
-  - [Project structure](#project-structure)
-  - [Database interface design](#database-interface-design)
-  - [Router default](#router-default)
-  - [Middleware](#middleware)
-  - [restful\_api](#restful_api)
-  - [Appoint router](#appoint-router)
-  - [Intelligent query](#intelligent-query)
-  - [Advanced operations](#advanced-operations)
-  - [Plans](#plans)
+- [Introduce](#introduce)
+- [Related items](#related-items)
+- [Technology selection](#technology-selection)
+- [Table of Contents](#table-of-contents)
+- [Run guidance](#run-guidance)
+- [Project structure](#project-structure)
+- [Database interface design](#database-interface-design)
+- [Router default](#router-default)
+- [Middleware](#middleware)
+- [restful\_api](#restful_api)
+- [Appoint router](#appoint-router)
+- [Intelligent query](#intelligent-query)
+- [Advanced operations](#advanced-operations)
+- [Plans](#plans)
 
 ## Run guidance
 
