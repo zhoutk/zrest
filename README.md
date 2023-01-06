@@ -1,7 +1,8 @@
 # Zrest    &emsp;&emsp;  [中文介绍](README_CN.md)  
 
 ## Introduce
-A rest api rapid devlopment framework using node.js & C++ addon with cmake & cmake.js. Supporting sqlite3, mysql & postgres, Crossing windows, linux & macos.
+A rest api rapid development framework using node.js & C++ addon with cmake & cmake.js. Supporting sqlite3, mysql & postgres, Crossing windows, linux & macos.  
+This combine and update gels， zjson and zorm, which is developed and used by me. You get a group rest api service, when you create a data table. Need no codes be written. It support lots' advanced query such as in, sum, count, group etc. Sql will be generated auto from json object.
 
 ## Related items
 - [gels](https://github.com/zhoutk/gels)  A framework, which use koa2, mysql & typescript , building a rest api service.
@@ -16,20 +17,20 @@ A rest api rapid devlopment framework using node.js & C++ addon with cmake & cma
 - postgres - c api (pgsql14)
 
 ## Table of Contents
-- [Introduce](#introduce)
-- [Related items](#related-items)
-- [Technology selection](#technology-selection)
-- [Table of Contents](#table-of-contents)
-- [Run guidance](#run-guidance)
-- [Project structure](#project-structure)
-- [Database interface design](#database-interface-design)
-- [Router default](#router-default)
-- [Middleware](#middleware)
-- [restful\_api](#restful_api)
-- [Appoint router](#appoint-router)
-- [Intelligent query](#intelligent-query)
-- [Advanced operations](#advanced-operations)
-- [Plans](#plans)
+  - [Introduce](#introduce)
+  - [Related items](#related-items)
+  - [Technology selection](#technology-selection)
+  - [Table of Contents](#table-of-contents)
+  - [Run guidance](#run-guidance)
+  - [Project structure](#project-structure)
+  - [Database interface design](#database-interface-design)
+  - [Router default](#router-default)
+  - [Middleware](#middleware)
+  - [restful\_api](#restful_api)
+  - [Appoint router](#appoint-router)
+  - [Intelligent query](#intelligent-query)
+  - [Advanced operations](#advanced-operations)
+  - [Plans](#plans)
 
 ## Run guidance
 
