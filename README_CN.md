@@ -69,8 +69,8 @@
     yarn global add typescript eslint nodemon
     yarn
     tsc -w          //或 command + shift + B，选 tsc:监视
-    yarm configure
-    yarn compile    //编译c++插件
+    yarm configure  //windows下最低vs2019, gcc 7.5, macos clang12.0
+    yarn compile    //编译c++插件, 若有问题，请参照 [Zorm](https://gitee.com/zhoutk/zorm) 文档，特别是最后的注释
     yarn start      //或 node ./dist/index.js
     export PACTUM_REQUEST_BASE_URL=http://127.0.0.1:12321
     yarn test       //运行rest api接口测试，请仔细查看测试文件，其中有相当完善的使用方法
