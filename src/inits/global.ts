@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import {STCODES} from './enums'
 import lodash from 'lodash'
+import 'bluebird-global'
 import {STMESSAGES} from './enums'
 import { configure, getLogger} from 'log4js'
 import uuid from 'uuid'

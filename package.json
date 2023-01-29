@@ -19,6 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "bindings": "^1.5.0",
+    "bluebird": "^3.7.2",
+    "bluebird-global": "^1.0.1",
     "cli-color": "^2.0.3",
     "cmake-js": "^7.0.0",
     "jsonwebtoken": "^8.5.1",
@@ -38,6 +40,8 @@
   },
   "devDependencies": {
     "@types/bindings": "^1.5.1",
+    "@types/bluebird": "^3.5.38",
+    "@types/bluebird-global": "^3.5.13",
     "@types/cli-color": "^2.0.2",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/koa": "^2.13.5",

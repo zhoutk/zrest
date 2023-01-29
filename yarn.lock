@@ -86,6 +86,18 @@
   dependencies:
     "@types/node" "*"
 
+"@types/bluebird-global@^3.5.13":
+  version "3.5.13"
+  resolved "https://registry.yarnpkg.com/@types/bluebird-global/-/bluebird-global-3.5.13.tgz#8fee8f1075501e9b8bb56fc0539753c38ecdc8df"
+  integrity sha512-jmq47VdRYy8KPjXDlJ6zO5Ie+l5j0X2fGdSbfCS3mGdM93MTy50dh/EfltIv/QD15hCYTY+0lm/C0Bou1tPYnQ==
+  dependencies:
+    "@types/bluebird" "*"
+
+"@types/bluebird@*", "@types/bluebird@^3.5.38":
+  version "3.5.38"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.38.tgz#7a671e66750ccd21c9fc9d264d0e1e5330bc9908"
+  integrity sha512-yR/Kxc0dd4FfwtEoLZMoqJbM/VE/W7hXn/MIjb+axcwag0iFmSPK7OBUZq1YWLynJUoWQkfUrI7T0HDqGApNSg==
+
 "@types/body-parser@*":
   version "1.19.2"
   resolved "https://registry.npmmirror.com/@types/body-parser/-/body-parser-1.19.2.tgz#aea2059e28b7658639081347ac4fab3de166e6f0"
@@ -505,6 +517,16 @@ bindings@^1.5.0:
   integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
   dependencies:
     file-uri-to-path "1.0.0"
+
+bluebird-global@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/bluebird-global/-/bluebird-global-1.0.1.tgz#147c174f4e3a19740e80d992ea70ec3dc51d0d95"
+  integrity sha512-llTREi0V3EUM150DKdMLlXN/X2QsQ/hWJDiaGnivqeDwE32I0dmivYLU9/VvhotTzvvbv7OiM6zjVXYJ2dCmKQ==
+
+bluebird@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
+  integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
