@@ -47,7 +47,7 @@ This combine and update gels， zjson and zorm, which is developed and used by m
             }
         },
         port: 12321,
-        db_dialect: 'sqlite3',              //select the database, not support sqlite3, mysql and postgres
+        db_dialect: 'sqlite3',              //select the database, support sqlite3, mysql and postgres
         db_options: {
             DbLogClose: false,              //show sql or not
             parameterized: false,           //Whether to perform parameterized query
