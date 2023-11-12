@@ -1,4 +1,4 @@
-﻿#ifdef __MSVC__ 
+#ifdef __MSVC__ 
 	#ifdef ZORM_LIB
 		#define ZORM_API __declspec(dllexport) 
 	#else

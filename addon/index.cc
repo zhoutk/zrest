@@ -64,6 +64,10 @@ Zorm::Zorm(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Zorm>(info), db(nu
         db = new ZORM::DbBase("sqlite3", options);
         break;
     }
+    case "dm8"_hash: {
+        db = new ZORM::DbBase("dm8", options);
+        break;
+    }
     default:
         break;
     }

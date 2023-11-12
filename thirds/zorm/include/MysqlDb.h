@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Idb.h"
-#include "Utils.h"
+#include "DbUtils.h"
 #include "GlobalConstants.h"
 #include "mysql.h"
 #include <algorithm>
@@ -61,7 +61,7 @@ namespace ZORM {
 					queryByParameter = options["parameterized"].toBool();
 			}
 
-			Json create(string tablename, Json& params) override
+			Json create(const string& tablename, const Json& params) override
 			{
 				if (!params.isError()) {
 					Json values(JsonType::Array);
@@ -74,12 +74,12 @@ namespace ZORM {
 					for (size_t i = 0; i < len; i++) {
 						string k = allKeys[i];
 						fields.append(k);
-						bool vIsString = params[k].isString();
+						bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 						string v = params[k].toString();
 						!queryByParameter && vIsString &&escapeString(v);
 						if(queryByParameter){
 							vs.append("?");
-							vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+							vIsString ? values.add(v) : values.add(params[k].toDouble());
 						}else{
 							if (vIsString)
 								vs.append("'").append(v).append("'");
@@ -100,7 +100,7 @@ namespace ZORM {
 				}
 			}
 
-			Json update(string tablename, Json& params) override
+			Json update(const string& tablename, const Json& params) override
 			{
 				if (!params.isError()) {
 					Json values(JsonType::Array);
@@ -120,7 +120,7 @@ namespace ZORM {
 						Json idJson;
 						for (size_t i = 0; i < len; i++) {
 							string k = allKeys[i];
-							bool vIsString = params[k].isString();
+							bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 							string v = params[k].toString();
 							!queryByParameter && vIsString &&escapeString(v);
 							if (k.compare("id") == 0) {
@@ -140,7 +140,7 @@ namespace ZORM {
 								if (queryByParameter)
 								{
 									fields.append(" ? ");
-									vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+									vIsString ? values.add(v) : values.add(params[k].toDouble());
 								}
 								else
 								{
@@ -165,7 +165,7 @@ namespace ZORM {
 			}
 
 
-			Json remove(string tablename, Json& params) override
+			Json remove(const string& tablename, const Json& params) override
 			{
 				if (!params.isError()) {
 					Json values(JsonType::Array);
@@ -173,12 +173,12 @@ namespace ZORM {
 					execSql.append(tablename).append(" where id = ");
 
 					string k = "id";
-					bool vIsString = params[k].isString();
+					bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 					string v = params[k].toString();
 					!queryByParameter && vIsString &&escapeString(v);
 					if(queryByParameter){
 						execSql.append(" ? ");
-						vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+						vIsString ? values.add(v) : values.add(params[k].toDouble());
 					}else{
 						if (vIsString)
 							execSql.append("'").append(v).append("'");
@@ -193,8 +193,9 @@ namespace ZORM {
 			}
 
 
-			Json select(string tablename, Json &params, vector<string> fields = vector<string>(), Json values = Json(JsonType::Array)) override
+			Json select(const string& tbname, const Json &params, vector<string> fields = vector<string>(), Json values = Json(JsonType::Array)) override
 			{
+				string tablename = tbname;
 				Json rs = genSql(tablename, values, params, fields, 1, queryByParameter);
 				if(rs["status"].toInt() == 200)
 					return queryByParameter ? ExecQuerySql(tablename, fields, values) : ExecQuerySql(tablename, fields);
@@ -202,8 +203,9 @@ namespace ZORM {
 					return rs;
 			}
 
-			Json querySql(string sql, Json params = Json(), Json values = Json(JsonType::Array), vector<string> fields = vector<string>()) override
+			Json querySql(const string& sqlstr, Json params = Json(), Json values = Json(JsonType::Array), vector<string> fields = vector<string>()) override
 			{
+				string sql(sqlstr);
 				bool parameterized = sql.find("?") != sql.npos;
 				Json rs = genSql(sql, values, params, fields, 2, parameterized);
 				if(rs["status"].toInt() == 200)
@@ -213,8 +215,9 @@ namespace ZORM {
 			}
 
 
-			Json execSql(string sql, Json params = Json(), Json values = Json(JsonType::Array)) override
+			Json execSql(const string& sqlstr, Json params = Json(), Json values = Json(JsonType::Array)) override
 			{
+				string sql(sqlstr);
 				bool parameterized = sql.find("?") != sql.npos;
 				Json rs = genSql(sql, values, params, std::vector<string>(), 3, parameterized);
 				if(rs["status"].toInt() == 200)
@@ -224,7 +227,7 @@ namespace ZORM {
 			}
 
 
-			Json insertBatch(string tablename, Json& elements, string constraint) override
+			Json insertBatch(const string& tablename, const Json& elements, string constraint) override
 			{
 				string sql = "insert into ";
 				if (elements.size() < 2) {
@@ -241,12 +244,12 @@ namespace ZORM {
 						for (int j = 0; j < keys.size(); j++) {
 							if(i == 0)
 								updateStr.append(keys[j]).append(" = values(").append(keys[j]).append(")");
-							bool vIsString = elements[i][keys[j]].isString();
+							bool vIsString = elements[i][keys[j]].isString() || elements[i][keys[j]].isArray() || elements[i][keys[j]].isObject();
 							string v = elements[i][keys[j]].toString();
 							!queryByParameter && vIsString && escapeString(v);
 							if(queryByParameter){
 								valueStr.append("?");
-								values.addSubitem(v);
+								values.add(v);
 							}else{
 								if(vIsString)
 									valueStr.append("'").append(v).append("'");
@@ -270,7 +273,7 @@ namespace ZORM {
 				}
 			}
 
-			Json transGo(Json& sqls, bool isAsync = false) override
+			Json transGo(const Json& sqls, bool isAsync = false) override
 			{
 				if (sqls.size() < 2) {
 					return DbUtils::MakeJsonObject(STPARAMERR);
@@ -287,7 +290,7 @@ namespace ZORM {
 					for (size_t i = 0; i < sqls.size(); i++) {
 						string sql = sqls[i]["text"].toString();
 						Json values = sqls[i]["values"].isError() ? Json(JsonType::Array) : sqls[i]["values"];
-						isExecSuccess = ExecSqlForTransGo(sql, values, &errmsg);
+						isExecSuccess = ExecSqlForTransGo(mysql, sql, values, &errmsg);
 						if (!isExecSuccess)
 							break;
 					}
@@ -315,9 +318,10 @@ namespace ZORM {
 			}
 
 		private:
-			Json genSql(string& querySql, Json& values, Json& params, vector<string> fields = vector<string>(), int queryType = 1, bool parameterized = false)
+			Json genSql(string& querySql, Json& values, const Json& ps, vector<string> fields = vector<string>(), int queryType = 1, bool parameterized = false)
 			{
-				if (!params.isError()) {
+				if (!ps.isError()) {
+					Json params(ps);
 					string tablename = querySql;
 					querySql = "";
 					string where = "";
@@ -328,19 +332,19 @@ namespace ZORM {
 						fieldsJoinStr = DbUtils::GetVectorJoinStr(fields);
 					}
 
-					string fuzzy = params.getAndRemove("fuzzy").toString();
-					string sort = params.getAndRemove("sort").toString();
-					int page = atoi(params.getAndRemove("page").toString().c_str());
-					int size = atoi(params.getAndRemove("size").toString().c_str());
-					string sum = params.getAndRemove("sum").toString();
-					string count = params.getAndRemove("count").toString();
-					string group = params.getAndRemove("group").toString();
+					string fuzzy = params.take("fuzzy").toString();
+					string sort = params.take("sort").toString();
+					int page = atoi(params.take("page").toString().c_str());
+					int size = atoi(params.take("size").toString().c_str());
+					string sum = params.take("sum").toString();
+					string count = params.take("count").toString();
+					string group = params.take("group").toString();
 
 					vector<string> allKeys = params.getAllKeys();
 					size_t len = allKeys.size();
 					for (size_t i = 0; i < len; i++) {
 						string k = allKeys[i];
-						bool vIsString = params[k].isString();
+						bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 						string v = params[k].toString();
 						!parameterized && vIsString && escapeString(v);
 						if (where.length() > 0) {
@@ -366,7 +370,7 @@ namespace ZORM {
 											whereExtra.append("?");
 											if (i < eleLen - 1)
 												whereExtra.append(",");
-											values.addSubitem(el);
+											values.add(el);
 										}
 										whereExtra.append(")");
 									}else
@@ -387,7 +391,7 @@ namespace ZORM {
 										}
 										whereExtra.append(eqStr);
 										if(parameterized)
-											values.addSubitem(vsStr);
+											values.add(vsStr);
 										else{
 											vsStr.append("'");
 											whereExtra.append(vsStr);
@@ -404,7 +408,7 @@ namespace ZORM {
 								if (vls.size() == 2) {
 									if(parameterized){
 										where.append(k).append(vls.at(0)).append(" ? ");
-										values.addSubitem(vls.at(1));
+										values.add(vls.at(1));
 									}else
 										where.append(k).append(vls.at(0)).append("'").append(vls.at(1)).append("'");
 								}
@@ -412,8 +416,8 @@ namespace ZORM {
 									if(parameterized){
 										where.append(k).append(vls.at(0)).append(" ? ").append("and ");
 										where.append(k).append(vls.at(2)).append("? ");
-										values.addSubitem(vls.at(1));
-										values.addSubitem(vls.at(3));
+										values.add(vls.at(1));
+										values.add(vls.at(3));
 									}else{
 										where.append(k).append(vls.at(0)).append("'").append(vls.at(1)).append("' and ");
 										where.append(k).append(vls.at(2)).append("'").append(vls.at(3)).append("'");
@@ -426,7 +430,7 @@ namespace ZORM {
 							else if (fuzzy == "1") {
 								if(parameterized){
 									where.append(k).append(" like ? ");
-									values.addSubitem(v.insert(0, "%").append("%"));
+									values.add(v.insert(0, "%").append("%"));
 								}
 								else
 									where.append(k).append(" like '%").append(v).append("%'");
@@ -435,7 +439,7 @@ namespace ZORM {
 							else {
 								if(parameterized){
 									where.append(k).append(" = ? ");
-									vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+									vIsString ? values.add(v) : values.add(params[k].toDouble());
 								}else{
 									if (vIsString)
 										where.append(k).append(" = '").append(v).append("'");
@@ -542,15 +546,15 @@ namespace ZORM {
 							for (int i = 0; i < num_fields; ++i)
 							{
 								if(IS_NUM(fields[i].type))
-									al.addSubitem(fields[i].name, atof(row[i]));
+									al.add(fields[i].name, atof(row[i]));
 								else
-									al.addSubitem(fields[i].name, row[i]);
+									al.add(fields[i].name, row[i]);
 							}
 							arr.push_back(al);
 						}
 						if (arr.empty())
 							rs.extend(DbUtils::MakeJsonObject(STQUERYEMPTY));
-						rs.addSubitem("data", arr);
+						rs.add("data", arr);
 					}
 					mysql_free_result(result);
 				}
@@ -637,26 +641,26 @@ namespace ZORM {
 							ps[i].is_null = &is_null[i];
 						}
 						ret = mysql_stmt_bind_result(stmt, ps);
-						vector<Json> arr;
+						Json arr(JsonType::Array);
 						while (mysql_stmt_fetch(stmt) != MYSQL_NO_DATA)
 						{
 							Json al;
 							for (int i = 0; i < num_fields; ++i)
 							{
 								if (is_null[i])
-									al.addSubitem(fields[i].name, nullptr);
+									al.add(fields[i].name, nullptr);
 								else if (fields[i].type == MYSQL_TYPE_LONG || fields[i].type == MYSQL_TYPE_LONGLONG)  //count
-									al.addSubitem(fields[i].name, (long)*((int *)dataOuts[i]));
+									al.add(fields[i].name, (long)*((int *)dataOuts[i]));
 								else if (fields[i].type == MYSQL_TYPE_DOUBLE || fields[i].type == MYSQL_TYPE_NEWDECIMAL) //sum
-									al.addSubitem(fields[i].name, *((double *)dataOuts[i]));
+									al.add(fields[i].name, *((double *)dataOuts[i]));
 								else
-									al.addSubitem(fields[i].name, dataOuts[i]);
+									al.add(fields[i].name, dataOuts[i]);
 							}
 							arr.push_back(al);
 						}
-						if (arr.empty())
+						if (arr.size() == 0)
 							rs.extend(DbUtils::MakeJsonObject(STQUERYEMPTY));
-						rs.addSubitem("data", arr);
+						rs.add("data", arr);
 						delete [] ps;
 						delete [] is_null;
 						for(auto el : dataOuts)
@@ -687,7 +691,7 @@ namespace ZORM {
 				}
 				else {
 					int affected = (int)mysql_affected_rows(mysql);
-					rs.addSubitem("affected", affected);
+					rs.add("affected", affected);
 				}
 				!DbLogClose && std::cout << "SQL: " << aQuery << std::endl;
 				return rs;
@@ -747,7 +751,7 @@ namespace ZORM {
 						return rs;
 					}
 					int affected = (int)mysql_affected_rows(mysql);
-					rs.addSubitem("affected", affected);
+					rs.add("affected", affected);
 					for (auto el : dataInputs)
 						delete[] el;
 				}
@@ -818,15 +822,7 @@ namespace ZORM {
 				}
 			};
 
-			bool ExecSqlForTransGo(string aQuery, Json values = Json(JsonType::Array), string* out = nullptr) {
-				string err = "";
-				MYSQL* mysql = GetConnection(err);
-				if (mysql == nullptr){
-					if(out)
-						*out += "can not connect the database.";
-					return false;
-				}
-
+			bool ExecSqlForTransGo(MYSQL* mysql, string aQuery, Json values = Json(JsonType::Array), string* out = nullptr) {
 				MYSQL_STMT* stmt = mysql_stmt_init(mysql);
 				if (mysql_stmt_prepare(stmt, aQuery.c_str(), aQuery.length()))
 				{

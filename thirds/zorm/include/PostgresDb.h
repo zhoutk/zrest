@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Idb.h"
-#include "Utils.h"
+#include "DbUtils.h"
 #include "GlobalConstants.h"
 #include <algorithm>
 #include <cstring>
@@ -66,7 +66,7 @@ namespace ZORM {
 					queryByParameter = options["parameterized"].toBool();
 			}
 
-			Json create(string tablename, Json& params) override
+			Json create(const string& tablename, const Json& params) override
 			{
 				if (!params.isError()) {
 					Json values(JsonType::Array);
@@ -79,12 +79,12 @@ namespace ZORM {
 					for (size_t i = 0; i < len; i++) {
 						string k = allKeys[i];
 						fields.append(k);
-						bool vIsString = params[k].isString();
+						bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 						string v = params[k].toString();
 						!queryByParameter && vIsString &&escapeString(v);
 						if(queryByParameter){
 							vs.append("$").append(DbUtils::IntTransToString(i+1));
-							vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+							vIsString ? values.add(v) : values.add(params[k].toDouble());
 						}else{
 							if (vIsString)
 								vs.append("'").append(v).append("'");
@@ -105,7 +105,7 @@ namespace ZORM {
 				}
 			}
 
-			Json update(string tablename, Json& params) override
+			Json update(const string& tablename, const Json& params) override
 			{
 				if (!params.isError()) {
 					Json values(JsonType::Array);
@@ -126,7 +126,7 @@ namespace ZORM {
 						Json idJson;
 						for (size_t i = 0; i < len; i++) {
 							string k = allKeys[i];
-							bool vIsString = params[k].isString();
+							bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 							string v = params[k].toString();
 							!queryByParameter && vIsString &&escapeString(v);
 							if (k.compare("id") == 0) {
@@ -146,7 +146,7 @@ namespace ZORM {
 								if (queryByParameter)
 								{
 									fields.append(" $").append(DbUtils::IntTransToString(index++));
-									vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+									vIsString ? values.add(v) : values.add(params[k].toDouble());
 								}
 								else
 								{
@@ -173,7 +173,7 @@ namespace ZORM {
 				}
 			}
 
-			Json remove(string tablename, Json& params) override
+			Json remove(const string& tablename, const Json& params) override
 			{
 				if (!params.isError()) {
 					Json values(JsonType::Array);
@@ -181,12 +181,12 @@ namespace ZORM {
 					execSql.append(tablename).append(" where id = ");
 
 					string k = "id";
-					bool vIsString = params[k].isString();
+					bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 					string v = params[k].toString();
 					!queryByParameter && vIsString &&escapeString(v);
 					if(queryByParameter){
 						execSql.append(" $1 ");
-						vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+						vIsString ? values.add(v) : values.add(params[k].toDouble());
 					}else{
 						if (vIsString)
 							execSql.append("'").append(v).append("'");
@@ -200,18 +200,19 @@ namespace ZORM {
 				}
 			}
 
-			Json select(string tablename, Json &params, vector<string> fields = vector<string>(), Json values = Json(JsonType::Array)) override
+			Json select(const string& tbname, const Json &params, vector<string> fields = vector<string>(), Json values = Json(JsonType::Array)) override
 			{
+				string tablename = tbname;
 				Json rs = genSql(tablename, values, params, fields, 1, queryByParameter);
-				if(rs["status"].toInt() == 200){
+				if(rs["status"].toInt() == 200)
 					return ExecQuerySql(tablename, fields, values);
-				}
 				else
 					return rs;
 			}
 
-			Json querySql(string sql, Json params = Json(), Json values = Json(JsonType::Array), vector<string> fields = vector<string>()) override
+			Json querySql(const string& sqlstr, Json params = Json(), Json values = Json(JsonType::Array), vector<string> fields = vector<string>()) override
 			{
+				string sql(sqlstr);
 				bool parameterized = sql.find("$") != sql.npos;
 				Json rs = genSql(sql, values, params, fields, 2, parameterized);
 				if(rs["status"].toInt() == 200)
@@ -220,8 +221,9 @@ namespace ZORM {
 					return rs;
 			}
 
-			Json execSql(string sql, Json params = Json(), Json values = Json(JsonType::Array)) override
+			Json execSql(const string& sqlstr, Json params = Json(), Json values = Json(JsonType::Array)) override
 			{
+				string sql(sqlstr);
 				bool parameterized = sql.find("$") != sql.npos;
 				Json rs = genSql(sql, values, params, std::vector<string>(), 3, parameterized);
 				if(rs["status"].toInt() == 200)
@@ -230,7 +232,7 @@ namespace ZORM {
 					return rs;
 			}
 
-			Json insertBatch(string tablename, Json& elements, string constraint) override
+			Json insertBatch(const string& tablename, const Json& elements, string constraint) override
 			{
 				string sql = "insert into ";
 				vector<string> restrain = DbUtils::MakeVector(constraint);
@@ -252,12 +254,12 @@ namespace ZORM {
 								if (iter == restrain.end())
 									updateStr.append(keys[j]).append(" = excluded.").append(keys[j]).append(",");
 							}
-							bool vIsString = elements[i][keys[j]].isString();
+							bool vIsString = elements[i][keys[j]].isString() || elements[i][keys[j]].isArray() || elements[i][keys[j]].isObject();
 							string v = elements[i][keys[j]].toString();
 							!queryByParameter && vIsString && escapeString(v);
 							if(queryByParameter){
 								valueStr.append("$").append(DbUtils::IntTransToString(index++));
-								values.addSubitem(v);
+								values.add(v);
 							}else{
 								if(vIsString)
 									valueStr.append("'").append(v).append("'");
@@ -286,7 +288,7 @@ namespace ZORM {
 				}
 			}
 
-			Json transGo(Json& sqls, bool isAsync = false) override
+			Json transGo(const Json& sqls, bool isAsync = false) override
 			{
 				if (sqls.size() < 2) {
 					return DbUtils::MakeJsonObject(STPARAMERR);
@@ -298,17 +300,18 @@ namespace ZORM {
 					PGconn* pq = GetConnection(err);
 					if (pq == nullptr)
 						return DbUtils::MakeJsonObject(STDBCONNECTERR, err);
-					sqls.push_front(Json({{"text", "BEGIN TRANSACTION;"}}));
-					sqls.push_back(Json({{"text", "END TRANSACTION;"}}));
-					for (size_t i = 0; i < sqls.size(); i++) {
-						string sql = sqls[i]["text"].toString();
-						Json values = sqls[i]["values"].isError() ? Json(JsonType::Array) : sqls[i]["values"];
+					Json tsqls(sqls);
+					tsqls.push_front(Json({{"text", "BEGIN TRANSACTION;"}}));
+					tsqls.push_back(Json({{"text", "END TRANSACTION;"}}));
+					for (size_t i = 0; i < tsqls.size(); i++) {
+						string sql = tsqls[i]["text"].toString();
+						Json values = tsqls[i]["values"].isError() ? Json(JsonType::Array) : tsqls[i]["values"];
 						if(!ExecSqlForTransGo(pq, sql, values, &err)){
 							ExecSqlForTransGo(pq, "ROLLBACK;");
 							return DbUtils::MakeJsonObject(STDBOPERATEERR, err);
 						}
 					}
-					!DbLogClose && std::cout << "Transaction Success: run " << sqls.size() - 2 << " sqls." << std::endl;
+					!DbLogClose && std::cout << "Transaction Success: run " << tsqls.size() - 2 << " sqls." << std::endl;
 					return DbUtils::MakeJsonObject(STSUCCESS, "Transaction success."); 
 				}
 			}
@@ -332,9 +335,10 @@ namespace ZORM {
 				return index;
 			}
 
-			Json genSql(string& querySql, Json& values, Json& params, vector<string> fields = vector<string>(), int queryType = 1, bool parameterized = false)
+			Json genSql(string& querySql, Json& values, const Json& ps, vector<string> fields = vector<string>(), int queryType = 1, bool parameterized = false)
 			{
-				if (!params.isError()) {
+				if (!ps.isError()) {
+					Json params(ps);
 					string tablename = querySql;
 					querySql = "";
 					string where = "";
@@ -345,20 +349,20 @@ namespace ZORM {
 						fieldsJoinStr = DbUtils::GetVectorJoinStr(fields);
 					}
 
-					string fuzzy = params.getAndRemove("fuzzy").toString();
-					string sort = params.getAndRemove("sort").toString();
-					int page = atoi(params.getAndRemove("page").toString().c_str());
-					int size = atoi(params.getAndRemove("size").toString().c_str());
-					string sum = params.getAndRemove("sum").toString();
-					string count = params.getAndRemove("count").toString();
-					string group = params.getAndRemove("group").toString();
+					string fuzzy = params.take("fuzzy").toString();
+					string sort = params.take("sort").toString();
+					int page = atoi(params.take("page").toString().c_str());
+					int size = atoi(params.take("size").toString().c_str());
+					string sum = params.take("sum").toString();
+					string count = params.take("count").toString();
+					string group = params.take("group").toString();
 
 					vector<string> allKeys = params.getAllKeys();
 					size_t len = allKeys.size();
 					int index = getParameterizedIndex(tablename);
 					for (size_t i = 0; i < len; i++) {
 						string k = allKeys[i];
-						bool vIsString = params[k].isString();
+						bool vIsString = params[k].isString() || params[k].isArray() || params[k].isObject();
 						string v = params[k].toString();
 						!parameterized && vIsString && escapeString(v);
 						if (where.length() > 0) {
@@ -384,7 +388,7 @@ namespace ZORM {
 											whereExtra.append("$").append(DbUtils::IntTransToString(index++));
 											if (i < eleLen - 1)
 												whereExtra.append(",");
-											values.addSubitem(el);
+											values.add(el);
 										}
 										whereExtra.append(")");
 									}else
@@ -408,7 +412,7 @@ namespace ZORM {
 										}
 										whereExtra.append(eqStr);
 										if(parameterized)
-											values.addSubitem(vsStr);
+											values.add(vsStr);
 										else{
 											vsStr.append("'");
 											whereExtra.append(vsStr);
@@ -425,7 +429,7 @@ namespace ZORM {
 								if (vls.size() == 2) {
 									if(parameterized){
 										where.append(k).append(vls.at(0)).append(" $").append(DbUtils::IntTransToString(index++)).append(" ");
-										values.addSubitem(vls.at(1));
+										values.add(vls.at(1));
 									}else
 										where.append(k).append(vls.at(0)).append("'").append(vls.at(1)).append("'");
 								}
@@ -433,8 +437,8 @@ namespace ZORM {
 									if(parameterized){
 										where.append(k).append(vls.at(0)).append(" $").append(DbUtils::IntTransToString(index++)).append(" ").append("and ");
 										where.append(k).append(vls.at(2)).append(" $").append(DbUtils::IntTransToString(index++)).append(" ");
-										values.addSubitem(vls.at(1));
-										values.addSubitem(vls.at(3));
+										values.add(vls.at(1));
+										values.add(vls.at(3));
 									}else{
 										where.append(k).append(vls.at(0)).append("'").append(vls.at(1)).append("' and ");
 										where.append(k).append(vls.at(2)).append("'").append(vls.at(3)).append("'");
@@ -447,7 +451,7 @@ namespace ZORM {
 							else if (fuzzy == "1") {
 								if(parameterized){
 									where.append("CAST(").append(k).append(" as TEXT) ").append(" like ").append(" $").append(DbUtils::IntTransToString(index++)).append(" ");
-									values.addSubitem(v.insert(0, "%").append("%"));
+									values.add(v.insert(0, "%").append("%"));
 								}
 								else
 									where.append(k).append(" like '%").append(v).append("%'");
@@ -456,7 +460,7 @@ namespace ZORM {
 							else {
 								if(parameterized){
 									where.append(k).append(" =").append(" $").append(DbUtils::IntTransToString(index++)).append(" ");
-									vIsString ? values.addSubitem(v) : values.addSubitem(params[k].toDouble());
+									vIsString ? values.add(v) : values.add(params[k].toDouble());
 								}else{
 									if (vIsString)
 										where.append(k).append(" = '").append(v).append("'");
@@ -559,7 +563,7 @@ namespace ZORM {
 				!DbLogClose && std::cout << "SQL: " << aQuery << std::endl;
 				if (PQresultStatus(res) == PGRES_TUPLES_OK) {
 					int coLen = PQnfields(res);
-					vector<Json> arr;
+					Json arr(JsonType::Array);
 					for (int i = 0; i < PQntuples(res); i++) {
 						Json al;
 						for (int j = 0; j < coLen; j++)
@@ -571,19 +575,19 @@ namespace ZORM {
 							case INT4OID:
 							case INT8OID:
 							case NUMERICOID:
-								al.addSubitem(PQfname(res, j), atof(PQgetvalue(res, i, j)));
+								al.add(PQfname(res, j), atof(PQgetvalue(res, i, j)));
 								break;
 
 							default:
-								al.addSubitem(PQfname(res, j), DbUtils::trim(PQgetvalue(res, i, j)));
+								al.add(PQfname(res, j), PQgetvalue(res, i, j));
 								break;
 							}
 						}
 						arr.push_back(al);
 					}
-					if (arr.empty())
+					if (arr.size() == 0)
 						rs.extend(DbUtils::MakeJsonObject(STQUERYEMPTY));
-					rs.addSubitem("data", arr);
+					rs.add("data", arr);
 					PQclear(res);
 					return rs;
 				}else{

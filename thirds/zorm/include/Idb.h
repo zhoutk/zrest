@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "dll_global.h"
 #include "zjson.hpp"
 #include <vector>
@@ -14,19 +14,19 @@ namespace ZORM
 	class ZORM_API Idb
 	{
 	public:
-		virtual Json select(string tablename, Json &params,
+		virtual Json select(const string& tablename, const Json &params,
 							vector<string> fields = vector<string>(),
 							Json values = Json(JsonType::Array)) = 0;
-		virtual Json create(string tablename, Json &params) = 0;
-		virtual Json update(string tablename, Json &params) = 0;
-		virtual Json remove(string tablename, Json &params) = 0;
-		virtual Json querySql(string sql, Json params = Json(),
+		virtual Json create(const string& tablename, const Json &params) = 0;
+		virtual Json update(const string& tablename, const Json &params) = 0;
+		virtual Json remove(const string& tablename, const Json &params) = 0;
+		virtual Json querySql(const string& sql, Json params = Json(),
 							  Json values = Json(JsonType::Array),
 							  vector<string> fields = vector<string>()) = 0;
-		virtual Json execSql(string sql, Json params = Json(),
+		virtual Json execSql(const string& sql, Json params = Json(),
 							 Json values = Json(JsonType::Array)) = 0;
-		virtual Json insertBatch(string tablename, Json &elements, string constraint = "id") = 0;
-		virtual Json transGo(Json &sqls, bool isAsync = false) = 0;
+		virtual Json insertBatch(const string& tablename, const Json &elements, string constraint = "id") = 0;
+		virtual Json transGo(const Json &sqls, bool isAsync = false) = 0;
 	};
 
 }

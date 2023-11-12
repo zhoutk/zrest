@@ -36,6 +36,14 @@ export default class DbInit extends BaseDao {
                 `score` double NULL DEFAULT 0,\
                 PRIMARY KEY (`id`) USING BTREE\
                 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 ROW_FORMAT = Dynamic;')
+        }else if(G.CONFIGS.db_dialect == 'dm8'){
+            G.ORM.execSql('DROP TABLE IF EXISTS "dbtest"."table_for_test"')
+            G.ORM.execSql('CREATE TABLE "dbtest"."table_for_test" (\
+                "id" CHAR(64) NOT NULL,\
+                "name" VARCHAR(128),\
+                "age" INTEGER,\
+                "score" DOUBLE,\
+                NOT CLUSTER PRIMARY KEY("id")) STORAGE(ON "MAIN", CLUSTERBTR) ;')
         }else{
             return new Promise((resolve, reject) => {
                 reject(G.jsResponse(G.STCODES.DBDIALECTNOTSUPPORT))
@@ -57,10 +65,12 @@ export default class DbInit extends BaseDao {
         G.ORM.insertBatch('table_for_test', JSON.stringify(cObjs))
         
         let placeholder: string = G.CONFIGS.db_dialect == 'postgres' ? '$1,$2,$3,$4' : '?,?,?,?'
+        let tableName: string = G.CONFIGS.db_dialect == 'dm8' ? '"dbtest"."table_for_test"' : 'table_for_test'
+        let fieldString: string = G.CONFIGS.db_dialect == 'dm8' ? '"id","name","age","score"' : 'id,name,age,score'
         let sqlArr = [
-            {text: 'insert into table_for_test (id,name,age,score) values (\'a4b5c6d7\',\'test003\',21,78.48)'},
-            {text: `insert into table_for_test (id,name,age,score) values (${placeholder})`, values: ['a5b6c7d8','test004',22,23.27]},
-            {text: 'insert into table_for_test (id,name,age,score) values (\'a6b7c8d9\',\'test005\',23,43.93)'},
+            {text: `insert into ${tableName} (${fieldString}) values ('a4b5c6d7','test003',21,78.48)`},
+            {text: `insert into ${tableName} (${fieldString}) values (${placeholder})`, values: ['a5b6c7d8','test004',22,23.27]},
+            {text: `insert into ${tableName} (${fieldString}) values ('a6b7c8d9','test005',23,43.93)`},
         ]
         return G.ORM.transGo(JSON.stringify(sqlArr))
     }

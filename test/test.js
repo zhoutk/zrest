@@ -3,6 +3,8 @@ const assert = require('assert')
 const { spec } = require('pactum')
 const { like, eachLike } = require('pactum-matchers')
 
+const { default:cfgs } = require('../dist/config/configs.js')
+
 it('test /rs/db_init', async () => {
   await spec()
     .post('/rs/db_init')
@@ -181,7 +183,7 @@ it('test query using count key', async () => {
     .expectJsonMatch({"status": 200})
 
   const dataZero = response.json['data'][0]
-  assert.equal(dataZero['total'], 5)
+  assert.equal(dataZero[cfgs.db_dialect == 'dm8' ? 'TOTAL' : 'total'], 5)
 });
 
 it('test query using sum key', async () => {
@@ -192,7 +194,7 @@ it('test query using sum key', async () => {
     .expectJsonMatch({"status": 200})
 
   const dataZero = response.json['data'][0]
-  assert.equal(dataZero['agesum'], 39)
+  assert.equal(dataZero[cfgs.db_dialect == 'dm8' ? 'AGESUM' : 'agesum'], 39)
 });
 
 it('test query using group key', async () => {
@@ -212,7 +214,7 @@ it('test query using group key', async () => {
     .expectJsonMatch({"status": 200})
 
   const dataZero = response.json['data'][0]
-  assert.equal(dataZero['total'], 2)
+  assert.equal(dataZero[cfgs.db_dialect == 'dm8' ? 'TOTAL' : 'total'], 2)
 });
 
 it('test query using greater than and less than', async () => {
