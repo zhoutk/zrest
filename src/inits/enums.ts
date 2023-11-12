@@ -9,7 +9,7 @@ enum STCODES {
     USERNAMEERR = 412,          //用户名错误或不存在
     AUTHORIZATIONERR = 413,    //权限不够
     USERNOTFOUNDERR = 414,         //用户不存在
-    DATABANDELETE = 415,        //数据禁止删除
+    DATABANDELETE = 416,        //数据禁止删除
     EXCEPTIONERR = 500,            //发生异常
     DBDIALECTNOTSUPPORT = 700,     //不支持的数据库
     DBCONNECTERR = 701,        //数据库连接失败
